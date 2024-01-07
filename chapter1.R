@@ -234,4 +234,128 @@ ggplot(penguins, aes(x = fct_infreq(species))) +
 
 # numerical variable = quantitative and can be continuous or discrete
 
+# histogram is a common visualization for numerical variables
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 200) # binwidth changes the thickness of the bars
+
+# density plots are also used for visualizations of numerical variables
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_density()
+
+# Exercises
+
+# 1. Make a bar plot of species of penguins, where you assign species to the y aesthetic. How is this plot different?
+ggplot(penguins, aes(y = species)) +
+  geom_bar()
+# bars are horizontal
+
+# 2. How are the following two plots different? Which aesthetic, color or fill, is more useful for changing the color of bars?
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
+# fill is more useful
+
+# 3. What does the bins argument in geom_histogram() do?
+# It changes the widths of the bars.
+
+# 4. Make a histogram of the carat variable in the diamonds dataset that is available when you load the tidyverse package. Experiment with different binwidths. What binwidth reveals the most interesting patterns?
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.1)
+
+#####
+# 1.5 Visualizing relationships
+
+# visualizing relationships requires two variables mapped to aesthetics of a plot
+# e.g. for a numerical variable and categorical variable,
+# side-by-side boxplots can be good
+
+ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot()
+
+# another way to visualize this is with a density plot
+
+ggplot(penguins, aes(x = body_mass_g, color = species)) +
+  geom_density(linewidth = 0.75) # made lines thicker to stand out against the background
+
+# can also map species to color and fill and use alpha to make transparent
+
+ggplot(penguins, aes(x = body_mass_g, color = species, fill = species)) +
+  geom_density(alpha = 0.5)
+
+# stacked bar plots can be good to visualize two categorical variables
+# e.g. number of pengiuns of each species on each island
+ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar()
+# this plot shows that there are an equal number of Adelie penguins on each island
+# but not the percentage of the penguins as a whole  on each island
+
+ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar(position = "fill") #can create a relative frequency plot by using position = "fill"
+
+# for comparing two numerical variables,
+# scatter plots are the most common form of data
+
+# three or more variables can be incorporated into a plot
+# by using additional aesthetics
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = island))
+
+# But too many many aesthetic mappings on a plot can make it look
+# cluttered and difficult to make sense of
+# facet_wrap() can be used to facet a plot by a single variable
+
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species)) +
+  facet_wrap(~island)
+
+# Exercises
+# 1. The mpg data frame that is bundled with the ggplot2 package contains 234 observations collected by the US Environmental Protection Agency on 38 car models. Which variables in mpg are categorical? Which variables are numerical? 
+glimpse(mpg)
+#shows each variable and first column
+?mpg
+
+# 2. Make a scatterplot of hwy vs. displ using the mpg data frame. Next, map a third, numerical variable to color, then size, then both color and size, then shape. How do these aesthetics behave differently for categorical vs. numerical variables?
+ggplot(mpg) +
+  geom_point(aes(x = hwy, y = displ, color = class, size = class, shape = fl)) +
+  scale_color_colorblind()
+
+# 3. In the scatterplot of hwy vs. displ, what happens if you map a third variable to linewidth?
+ggplot(mpg) +
+  geom_point(aes(x = hwy, y = displ)) +
+  geom_density(aes(linewidth = cyl)) +
+  scale_color_colorblind()
+
+# 4. What happens if you map the same variable to multiple aesthetics?
+ggplot(mpg) +
+  geom_point(aes(x = hwy, y = displ, color = fl, shape = fl), size = 6) +
+  scale_color_colorblind()
+
+# 5. Make a scatterplot of bill_depth_mm vs. bill_length_mm and color the points by species. What does adding coloring by species reveal about the relationship between these two variables? What about faceting by species?
+ggplot(penguins) +
+  geom_point(aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  scale_color_colorblind() +
+  facet_wrap(~species)
+#each species has a different average bill length to depth ratio
+
+# 6. Why does the following yield two separate legends? How would you fix it to combine the two legends?
+# the mapping is at the golabl level rather than at the local level
+ggplot(data = penguins) +
+  geom_point(aes(x = bill_length_mm, y = bill_depth_mm, color = species, shape = species)) +
+  labs(color = "Species")
+# faceting ?
+
+# 7. Create the two following stacked bar plots. Which question can you answer with the first one? Which question can you answer with the second one?
+ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar(position = "fill")
+# what proportion of each penguin species make up the penguin communities of each island
+ggplot(penguins, aes(x = species, fill = island)) +
+  geom_bar(position = "fill")
+# Which islands are each penguin species distributed on?
+
+#####
+# 1.6 Saving your plots
+
+
 
