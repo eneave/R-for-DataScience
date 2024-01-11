@@ -357,5 +357,37 @@ ggplot(penguins, aes(x = species, fill = island)) +
 #####
 # 1.6 Saving your plots
 
+# ggsave() can be used to save plots and if no directory is specified
+# it will save to your working directory
+
+# if the width and the height aren't specified they will be taken from
+# the dimensions of the current plotting device so for reproducibility
+# they should be specified
+
+# Exercises
+# 1. Run the following lines of code. Which of the two plots is saved as mpg-plot.png? Why?
+ggplot(mpg, aes(x = class)) +
+  geom_bar()
+ggplot(mpg, aes(x = cty, y = hwy)) +
+  geom_point()
+ggsave("mpg-plot.png")
+# the second plot because it was the most recent 
+
+# 2. What do you need to change in the code above to save the plot as a PDF instead of a PNG? How could you find out what types of image files would work in ggsave()?
+# change the file ending to '.pdf'
+?ggsave()
+
+#####
+# 1.7 Common problems
+
+# if there is a + in the console R doesn't think
+# you've finished typing your code
+
+# common problem in ggplot2 is to put the + in the wrong place
+# it has to come at the end of a line
+
+# ? followed by the function name will bring up the documentation
+
+
 
 
